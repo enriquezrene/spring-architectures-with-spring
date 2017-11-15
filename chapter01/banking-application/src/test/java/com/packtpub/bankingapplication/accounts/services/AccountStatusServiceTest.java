@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class AccountStatusTest {
+public class AccountStatusServiceTest {
 
     @Test
     public void theAccountStatusIsSendUsingThePreferredNotificationChannels() throws Exception {
@@ -23,12 +23,8 @@ public class AccountStatusTest {
         Customer customer = Mockito.mock(Customer.class);
         CustomerRepository customerRepository = mock(CustomerRepository.class);
         List<NotificationChannel> preferredNotificationChannels = new ArrayList<>();
-        NotificationChannel emailChannel = mock(NotificationChannel.class);
-        NotificationChannel faxChannel = mock(NotificationChannel.class);
-        when(emailChannel.getChannelName()).thenReturn("email");
-        when(faxChannel.getChannelName()).thenReturn("fax");
-        preferredNotificationChannels.add(emailChannel);
-        preferredNotificationChannels.add(faxChannel);
+        preferredNotificationChannels.add(NotificationChannel.EMAIL);
+        preferredNotificationChannels.add(NotificationChannel.FAX);
         when(customerRepository.getPreferredNotificationChannels(customer)).thenReturn(preferredNotificationChannels);
         AccountStatusRepository accountStatusRepository = mock(AccountStatusRepository.class);
         when(accountStatusRepository.getCustomerAccountStatus(customer)).thenReturn(accountStatus);

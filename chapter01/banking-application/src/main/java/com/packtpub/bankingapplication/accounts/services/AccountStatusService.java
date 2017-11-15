@@ -29,9 +29,9 @@ public class AccountStatusService {
         AccountStatus accountStatus = accountStatusRepository.getCustomerAccountStatus(customer);
         configuredChannels.forEach(
                 notificationChannel -> {
-                    if ("email".equals(notificationChannel.getChannelName())) {
+                    if (NotificationChannel.EMAIL.equals(notificationChannel)) {
                         notificationService.sendByEmail(accountStatus);
-                    } else if ("fax".equals(notificationChannel.getChannelName())) {
+                    } else if (NotificationChannel.FAX.equals(notificationChannel)) {
                         notificationService.sendByFax(accountStatus);
                     }
                 }
