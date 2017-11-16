@@ -24,7 +24,7 @@ public class CustomerServiceTest {
 
         customerService.savePreferredNotificationChannels(customer, notificationChannels);
 
-        Mockito.verify(customerRepository, Mockito.times(1)).savePreferredChannel(channelOne);
-        Mockito.verify(customerRepository, Mockito.times(1)).savePreferredChannel(channelTwo);
+        Mockito.verify(customerRepository, Mockito.times(1)).savePreferredChannel(customer, channelOne);
+        Mockito.verify(customerRepository, Mockito.times(1)).savePreferredChannel(customer, channelTwo);
     }
 }
