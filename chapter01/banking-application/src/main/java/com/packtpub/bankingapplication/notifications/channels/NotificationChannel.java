@@ -1,4 +1,4 @@
-package com.packtpub.bankingapplication.notifications.services;
+package com.packtpub.bankingapplication.notifications.channels;
 
 import com.packtpub.bankingapplication.accounts.domain.AccountStatus;
 
