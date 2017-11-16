@@ -29,9 +29,8 @@ public class AccountStatusService {
         List<NotificationType> preferredChannels = customerRepository.getPreferredNotificationChannels(customer);
         AccountStatus accountStatus = accountStatusRepository.getCustomerAccountStatus(customer);
         preferredChannels.forEach(
-                channel -> {
-                    notificationChannelFactory.getNotificationChannel(channel).send(accountStatus);
-                }
+                channel ->
+                    notificationChannelFactory.getNotificationChannel(channel).send(accountStatus)
         );
     }
 }
