@@ -3,8 +3,9 @@ package com.packtpub.bankingapplication.accounts.services;
 import com.packtpub.bankingapplication.accounts.dao.CustomerRepository;
 import com.packtpub.bankingapplication.accounts.domain.AccountStatus;
 import com.packtpub.bankingapplication.accounts.domain.Customer;
-import com.packtpub.bankingapplication.notifications.domain.NotificationChannel;
-import com.packtpub.bankingapplication.notifications.services.NotificationService;
+import com.packtpub.bankingapplication.notifications.domain.NotificationType;
+import com.packtpub.bankingapplication.notifications.factory.NotificationChannelFactory;
+import com.packtpub.bankingapplication.notifications.services.NotificationChannel;
 
 import java.util.List;
 
@@ -13,27 +14,23 @@ import java.util.List;
  */
 public class AccountStatusService {
 
-    private NotificationService notificationService;
+    private NotificationChannelFactory notificationChannelFactory;
     private CustomerRepository customerRepository;
     private AccountStatusRepository accountStatusRepository;
 
 
-    public AccountStatusService(NotificationService notificationService, CustomerRepository customerRepository, AccountStatusRepository accountStatusRepository) {
-        this.notificationService = notificationService;
+    public AccountStatusService(NotificationChannelFactory notificationChannelFactory, CustomerRepository customerRepository, AccountStatusRepository accountStatusRepository) {
+        this.notificationChannelFactory = notificationChannelFactory;
         this.customerRepository = customerRepository;
         this.accountStatusRepository = accountStatusRepository;
     }
 
     public void sendAccountStatus(Customer customer) {
-        List<NotificationChannel> configuredChannels = customerRepository.getPreferredNotificationChannels(customer);
+        List<NotificationType> preferredChannels = customerRepository.getPreferredNotificationChannels(customer);
         AccountStatus accountStatus = accountStatusRepository.getCustomerAccountStatus(customer);
-        configuredChannels.forEach(
-                notificationChannel -> {
-                    if ("email".equals(notificationChannel.getChannelName())) {
-                        notificationService.sendByEmail(accountStatus);
-                    } else if ("fax".equals(notificationChannel.getChannelName())) {
-                        notificationService.sendByFax(accountStatus);
-                    }
+        preferredChannels.forEach(
+                channel -> {
+                    notificationChannelFactory.getNotificationChannel(channel).send(accountStatus);
                 }
         );
     }

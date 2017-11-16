@@ -1,7 +1,7 @@
 package com.packtpub.bankingapplication.accounts.dao;
 
 import com.packtpub.bankingapplication.accounts.domain.Customer;
-import com.packtpub.bankingapplication.notifications.domain.NotificationChannel;
+import com.packtpub.bankingapplication.notifications.domain.NotificationType;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface CustomerRepository {
 
-    void savePreferredChannel(Customer customer, NotificationChannel notificationChannel);
+    void savePreferredChannel(Customer customer, NotificationType notificationChannel);
 
-    List<NotificationChannel> getPreferredNotificationChannels(Customer customer);
+    List<NotificationType> getPreferredNotificationChannels(Customer customer);
 }
