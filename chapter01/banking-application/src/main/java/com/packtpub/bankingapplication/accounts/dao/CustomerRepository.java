@@ -8,13 +8,9 @@ import java.util.List;
 /**
  * Created by renriquez on 15/11/17.
  */
-public class CustomerRepository {
+public interface CustomerRepository {
 
-    public void savePreferredChannel(NotificationChannel notificationChannel) {
+    void savePreferredChannel(Customer customer, NotificationChannel notificationChannel);
 
-    }
-
-    public List<NotificationChannel> getPreferredNotificationChannels(Customer customer) {
-        return null;
-    }
+    List<NotificationChannel> getPreferredNotificationChannels(Customer customer);
 }

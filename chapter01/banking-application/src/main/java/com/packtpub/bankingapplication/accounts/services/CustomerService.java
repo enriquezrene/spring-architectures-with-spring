@@ -18,6 +18,6 @@ public class CustomerService {
     }
 
     public void savePreferredNotificationChannels(Customer customer, List<NotificationChannel> notificationChannels) {
-        notificationChannels.forEach(notificationChannel -> customerRepository.savePreferredChannel(notificationChannel));
+        notificationChannels.forEach(notificationChannel -> customerRepository.savePreferredChannel(customer, notificationChannel));
     }
 }
