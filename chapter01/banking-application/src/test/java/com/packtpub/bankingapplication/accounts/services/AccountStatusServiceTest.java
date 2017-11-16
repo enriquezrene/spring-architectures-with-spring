@@ -1,17 +1,17 @@
 package com.packtpub.bankingapplication.accounts.services;
 
 
+import com.packtpub.bankingapplication.accounts.dao.AccountStatusRepository;
 import com.packtpub.bankingapplication.accounts.dao.CustomerRepository;
 import com.packtpub.bankingapplication.accounts.domain.AccountStatus;
 import com.packtpub.bankingapplication.accounts.domain.Customer;
 import com.packtpub.bankingapplication.notifications.domain.NotificationType;
 import com.packtpub.bankingapplication.notifications.factory.NotificationChannelFactory;
-import com.packtpub.bankingapplication.notifications.services.EmailNotificationChannel;
-import com.packtpub.bankingapplication.notifications.services.FaxNotificationChannel;
-import com.packtpub.bankingapplication.notifications.services.NotificationChannel;
+import com.packtpub.bankingapplication.notifications.channels.impl.EmailNotificationChannel;
+import com.packtpub.bankingapplication.notifications.channels.impl.FaxNotificationChannel;
+import com.packtpub.bankingapplication.notifications.channels.NotificationChannel;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;

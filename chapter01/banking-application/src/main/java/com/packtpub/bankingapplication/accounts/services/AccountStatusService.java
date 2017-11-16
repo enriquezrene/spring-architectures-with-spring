@@ -1,11 +1,11 @@
 package com.packtpub.bankingapplication.accounts.services;
 
+import com.packtpub.bankingapplication.accounts.dao.AccountStatusRepository;
 import com.packtpub.bankingapplication.accounts.dao.CustomerRepository;
 import com.packtpub.bankingapplication.accounts.domain.AccountStatus;
 import com.packtpub.bankingapplication.accounts.domain.Customer;
 import com.packtpub.bankingapplication.notifications.domain.NotificationType;
 import com.packtpub.bankingapplication.notifications.factory.NotificationChannelFactory;
-import com.packtpub.bankingapplication.notifications.services.NotificationChannel;
 
 import java.util.List;
 

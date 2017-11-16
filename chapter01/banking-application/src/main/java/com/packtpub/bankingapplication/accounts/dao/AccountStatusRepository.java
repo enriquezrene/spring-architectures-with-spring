@@ -1,4 +1,4 @@
-package com.packtpub.bankingapplication.accounts.services;
+package com.packtpub.bankingapplication.accounts.dao;
 
 import com.packtpub.bankingapplication.accounts.domain.AccountStatus;
 import com.packtpub.bankingapplication.accounts.domain.Customer;
