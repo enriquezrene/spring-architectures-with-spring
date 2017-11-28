@@ -1,7 +1,8 @@
 package com.packtpub.demospringbatch.configuration;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.packtpub.demospringbatch.configuration.javachampionsloader.JavaChampionsReader;
+import com.packtpub.demospringbatch.domain.JavaChampion;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -15,116 +16,90 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-/**
- * Created by renriquez on 27/11/17.
- */
+@Slf4j
 @Configuration
 @EnableBatchProcessing
 public class BatchConfiguration {
 
-    private static final String readCsvFileIntoTableStep = "readCsvFileIntoTableStep";
-    private static final String readCsvFileIntoTableStepReader = readCsvFileIntoTableStep + "Reader";
-    private static final String readCsvFileIntoTableStepWriter = readCsvFileIntoTableStep + "Writer";
-    private static final String readCsvFileIntoTableStepProcessor = readCsvFileIntoTableStep + "Processor";
-    private static final String customerLoaderJob = "customerLoaderJob";
-    private Log log = LogFactory.getLog(getClass());
+
+    public static final String STEP_PROCESS_CSV_FILE = "LoadJavaChampionsFromFile";
+
+    public static final String DATA_READER = "ReadInformationFromCsvFile";
+    public static final String DATA_PROCESSOR = "ProcessInformation";
+    public static final String DATA_WRITER = "WriteProcessedInformation";
+
+    public static final String JAVA_CHAMPIONS_LOADER_JOB = "javaChampionsLoaderJob";
+
+    @Bean
+    public Job javaChampionsLoader(JobBuilderFactory jobs, @Qualifier(STEP_PROCESS_CSV_FILE) Step step) {
+        return jobs.get(JAVA_CHAMPIONS_LOADER_JOB)
+                .flow(step)
+                .end()
+                .build();
+    }
+
+
+    @Bean(name = STEP_PROCESS_CSV_FILE)
+    public Step readCsvFileAndPopulateDbTable(
+            StepBuilderFactory stepBuilderFactory,
+            PlatformTransactionManager platformTransactionManager,
+            @Qualifier(DATA_READER) ItemReader<JavaChampion> itemReader,
+            @Qualifier(DATA_PROCESSOR) ItemProcessor<JavaChampion, JavaChampion> itemProcessor,
+            @Qualifier(DATA_WRITER) ItemWriter<JavaChampion> itemWriter) {
+
+        StepBuilder builder = stepBuilderFactory.get(STEP_PROCESS_CSV_FILE);
+
+        return builder.<JavaChampion, JavaChampion>chunk(10)
+                .reader(itemReader)
+                .processor(itemProcessor)
+                .writer(itemWriter)
+                .transactionManager(platformTransactionManager)
+                .build();
+    }
+
+
+    @Bean(name = DATA_READER)
+    @StepScope
+    public FlatFileItemReader<JavaChampion> reader() throws Exception {
+        String fileName = "java-champions.csv";
+        return new JavaChampionsReader(fileName);
+    }
+
+
+    @Bean(name = DATA_PROCESSOR)
+    public ItemProcessor<JavaChampion, JavaChampion> processor() {
+        return objectFromRow -> {
+            log.info("Java Champion found: " + objectFromRow);
+            return objectFromRow;
+        };
+    }
+
+
+    @Bean(name = DATA_WRITER)
+    public JdbcBatchItemWriter<JavaChampion> writer(DataSource dataSource) throws Exception {
+        JdbcBatchItemWriter<JavaChampion> jdbcBatchItemWriter = new JdbcBatchItemWriter<JavaChampion>();
+        jdbcBatchItemWriter.setAssertUpdates(true);
+        jdbcBatchItemWriter.setDataSource(dataSource);
+        jdbcBatchItemWriter.setSql(
+                " INSERT INTO java_champion( first_name, last_name, country, year )" +
+                        " VALUES ( :firstName , :lastName, :country, :year ) ");
+        jdbcBatchItemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+        return jdbcBatchItemWriter;
+    }
+
 
     @Bean
     public TaskScheduler taskScheduler() {
         return new ConcurrentTaskScheduler();
     }
 
-
-    /**
-     * maps CSV data into rows of fields, which are then
-     * mapped to Customer.class instances based on conventions:
-     * <p/>
-     * <CODE>col 1 => firstName => customer.setFirstName(String)</CODE>
-     */
-    @Bean(name = readCsvFileIntoTableStepReader)
-    @StepScope
-    public FlatFileItemReader<Customer> reader() throws Exception {
-        String fileName = "customer.csv";
-
-        ClassPathResource resource = new ClassPathResource(fileName);
-
-
-        log.info(String.format("building FlatFileItemReader to read in the file %s", fileName));
-
-        FlatFileItemReader<Customer> csvFileReader = new FlatFileItemReader<>();
-        csvFileReader.setResource(resource);
-
-        DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer(DelimitedLineTokenizer.DELIMITER_COMMA);
-        delimitedLineTokenizer.setNames(new String[]{"lastName", "firstName"});
-
-        BeanWrapperFieldSetMapper<Customer> beanWrapperFieldSetMapper = new BeanWrapperFieldSetMapper<Customer>();
-        beanWrapperFieldSetMapper.setTargetType(Customer.class);
-
-        DefaultLineMapper<Customer> defaultLineMapper = new DefaultLineMapper<>();
-        defaultLineMapper.setLineTokenizer(delimitedLineTokenizer);
-        defaultLineMapper.setFieldSetMapper(beanWrapperFieldSetMapper);
-
-        csvFileReader.setLineMapper(defaultLineMapper);
-        return csvFileReader;
-    }
-
-    @Bean(name = readCsvFileIntoTableStepProcessor)
-    public ItemProcessor<Customer, Customer> processor() {
-        return new ItemProcessor<Customer, Customer>() {
-            @Override
-            public Customer process(Customer item) throws Exception {
-                log.info(String.format("processing the customer %s", item.toString()));
-                return item;
-            }
-        };
-    }
-
-    @Bean(name = readCsvFileIntoTableStepWriter)
-    public JdbcBatchItemWriter<Customer> writer(DataSource dataSource) throws Exception {
-        JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
-        jdbcBatchItemWriter.setAssertUpdates(true);
-        jdbcBatchItemWriter.setDataSource(dataSource);
-        jdbcBatchItemWriter.setSql(" INSERT INTO customer( first_name, last_name) VALUES ( :firstName , :lastName ) ");
-        jdbcBatchItemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Customer>());
-        return jdbcBatchItemWriter;
-    }
-
-    @Bean
-    public Job customerLoaderJob(JobBuilderFactory jobs, @Qualifier(readCsvFileIntoTableStep) Step s1) {
-        return jobs.get(customerLoaderJob)
-                .flow(s1)
-                .end()
-                .build();
-    }
-
-    @Bean(name = readCsvFileIntoTableStep)
-    public Step readCsvFileIntoTableStep(
-            StepBuilderFactory stepBuilderFactory,
-            PlatformTransactionManager platformTransactionManager,
-            @Qualifier(readCsvFileIntoTableStepReader) ItemReader<Customer> ir,
-            @Qualifier(readCsvFileIntoTableStepProcessor) ItemProcessor<Customer, Customer> itemProcessor,
-            @Qualifier(readCsvFileIntoTableStepWriter) ItemWriter<Customer> iw) {
-
-        StepBuilder builder = stepBuilderFactory.get(readCsvFileIntoTableStep);
-
-        return builder.<Customer, Customer>chunk(3)
-                .reader(ir)
-                .processor(itemProcessor)
-                .writer(iw)
-                .transactionManager(platformTransactionManager)
-                .build();
-    }
 }
