@@ -21,9 +21,14 @@ public class SpringDataDemoApplication {
 
     @Bean
     CommandLineRunner queryDatabase(CountryRepository countryRepository) {
-        return args -> {
+        return args ->
             countryRepository.findAll().forEach(System.out::println);
-        };
+    }
+
+    @Bean
+    CommandLineRunner queryByName(CountryRepository countryRepository) {
+        return args ->
+            countryRepository.findByName("Ecuador").forEach(System.out::println);
     }
 
     public static void main(String[] args) {
