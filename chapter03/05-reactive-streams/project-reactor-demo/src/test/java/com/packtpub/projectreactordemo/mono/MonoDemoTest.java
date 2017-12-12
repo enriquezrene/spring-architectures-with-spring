@@ -7,17 +7,14 @@ import reactor.core.publisher.Mono;
 public class MonoDemoTest {
 
     @Test
-    public void givenATextWhenTheSubscriptionHappensThenTheTextIsReceived() throws Exception {
-        String text = "Hello world";
-        Mono<String> prefixUsa = Mono.just(text);
+    public void givenAnEmptyMono_WhenTheDefaultIfEmptyOperatorIsUsed_ThenTheDefaultValueIsDeliveredAsResult() throws Exception {
+        String defaultMessage = "Hello world";
+        Mono<String> emptyMonoMessageProduced = Mono.empty();
 
-        prefixUsa.subscribe(element -> Assert.assertEquals(text, element));
+        Mono<String> monoMessageDelivered = emptyMonoMessageProduced.defaultIfEmpty(defaultMessage);
+
+        monoMessageDelivered.subscribe(messageDelivered ->
+                Assert.assertEquals(defaultMessage, messageDelivered));
     }
 
-    @Test
-    public void givenAnEmptyMonoWhenTheSubscriptionHappensThenTheResultIsEmpty() throws Exception {
-        Mono<String> prefixUsa = Mono.empty();
-
-        prefixUsa.subscribe(element -> Assert.assertEquals(Mono.empty(), element));
-    }
 }

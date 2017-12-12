@@ -11,16 +11,17 @@ import java.util.List;
 public class BackPressureDemo {
 
     @Test
-    public void givenAListOfElementsWhenTheBackPressureIsPresentThenOnlyTheNElementsRequestedArePresent() throws Exception {
-        List<Integer> digits = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
-        Iterator<Integer> digitsIterator = digits.iterator();
+    public void givenAListOfElements_WhenTheBackPressureIsPresent_ThenOnlyTheNElementsRequestedArePresent() throws Exception {
+        List<Integer> digitsArray = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
+        Iterator<Integer> digitsIterator = digitsArray.iterator();
+        Flux<Integer> fluxWithDigits = Flux.fromIterable(digitsArray);
 
-        Flux<Integer> digitsFlux = Flux.fromIterable(digits);
-
-        digitsFlux.take(5)
+        fluxWithDigits.take(5)
+                .log()
                 .subscribe(element ->
-                Assert.assertEquals(digitsIterator.next(), element)
-        );
-        Assert.assertEquals(Integer.valueOf(6), digitsIterator.next());
+                        Assert.assertEquals(digitsIterator.next(), element)
+                );
+
+        Assert.assertTrue(digitsIterator.next().equals(6));
     }
 }
