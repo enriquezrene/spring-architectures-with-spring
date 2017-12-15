@@ -52,16 +52,16 @@ public class SpringDataMongoReactiveApplicationTests {
                 .then()
                 .block();
 
-
-        List<String> customerIds = repository.findAll()
-                .map(customer ->
-                        customer.getId()
-                )
-                .collectList()
-                .block();
-
         int totalAmountOfInserts = quantityOfEntitiesToPersistAsFlux + 1;
-        Assert.assertEquals(totalAmountOfInserts, customerIds.size());
+
+        repository
+                .findAll()
+                .map(customer -> customer.getId())
+                .collectList()
+                .subscribe(data ->
+                        Assert.assertEquals(totalAmountOfInserts, data.size())
+                );
+
     }
 
     private Customer[] generateArrayWithElements(int quantity) {
