@@ -24,6 +24,6 @@ class BalanceService {
         if (customer == null) {
             return null
         }
-        return balanceRepository.findByBalanceMarkAndCustomerIdentification(BalanceMark.LAST, customerIdentification)
+        return balanceRepository.findByBalanceMarkAndCustomer(BalanceMark.LAST, customer)
     }
 }

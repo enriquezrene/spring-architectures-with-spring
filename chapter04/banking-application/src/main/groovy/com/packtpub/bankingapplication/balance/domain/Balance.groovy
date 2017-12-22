@@ -2,18 +2,17 @@ package com.packtpub.bankingapplication.balance.domain
 
 import com.packtpub.bankingapplication.balance.domain.enums.BalanceMark
 
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class Balance {
 
     @Id
-    long id
+    long idBalance
 
-    String customerIdentification
+    @ManyToOne
+    @JoinColumn(name = "id_customer")
+    Customer customer
 
     int balance
 

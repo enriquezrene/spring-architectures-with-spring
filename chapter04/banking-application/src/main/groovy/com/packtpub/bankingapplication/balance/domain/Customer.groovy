@@ -7,7 +7,9 @@ import javax.persistence.Id
 class Customer {
 
     @Id
-    Long id
+    Long idCustomer
 
     String identification
+
+    String fullName
 }

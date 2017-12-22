@@ -22,8 +22,8 @@ class BalanceController {
 
     @RequestMapping(value = "/customer/{id}/balance", method = RequestMethod.GET)
     ResponseEntity<Balance> queryCurrentBalance(
-            @PathVariable(value = "id") String customerIdentification) {
-        Balance balance = balanceService.queryCurrentBalance(customerIdentification)
+            @PathVariable(value = "id") String customerId) {
+        Balance balance = balanceService.queryCurrentBalance(customerId)
         if (balance == null) {
             return new ResponseEntity<Balance>(balance, HttpStatus.NOT_FOUND)
         }
