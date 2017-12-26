@@ -1,15 +1,18 @@
 package com.packtpub.bankingapplication.balance.domain
 
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @Entity
 class Customer {
 
     @Id
-    Long idCustomer
+    @GeneratedValue
+    Long id
 
-    String identification
+    String username, password
 
-    String fullName
+    boolean active
+
 }

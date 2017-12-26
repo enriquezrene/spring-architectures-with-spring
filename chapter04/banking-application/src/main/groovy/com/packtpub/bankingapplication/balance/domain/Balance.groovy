@@ -1,21 +1,24 @@
 package com.packtpub.bankingapplication.balance.domain
 
-import com.packtpub.bankingapplication.balance.domain.enums.BalanceMark
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 import javax.persistence.*
 
 @Entity
 class Balance {
 
-    @Id
-    long idBalance
 
+    @JsonIgnore
+    @Id
+    @GeneratedValue
+    long id
+
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "id_customer")
+    @JoinColumn(name = "customer_id")
     Customer customer
 
     int balance
 
-    @Enumerated(EnumType.STRING)
-    BalanceMark balanceMark
 }
+

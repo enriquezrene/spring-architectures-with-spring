@@ -1,11 +1,10 @@
 package com.packtpub.bankingapplication.balance.persistence
 
 import com.packtpub.bankingapplication.balance.domain.Customer
-import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Component
+import org.springframework.data.jpa.repository.JpaRepository
 
-@Component
-interface CustomerRepository extends CrudRepository<Customer, Long> {
+interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Customer findByIdentification(String identification)
+    Optional<Customer> findByUsername(String username)
+
 }

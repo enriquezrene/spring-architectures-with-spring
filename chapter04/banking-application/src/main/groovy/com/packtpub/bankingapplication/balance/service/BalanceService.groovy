@@ -1,7 +1,6 @@
 package com.packtpub.bankingapplication.balance.service
 
 import com.packtpub.bankingapplication.balance.domain.Balance
-import com.packtpub.bankingapplication.balance.domain.enums.BalanceMark
 import com.packtpub.bankingapplication.balance.persistence.BalanceRepository
 import com.packtpub.bankingapplication.balance.persistence.CustomerRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,8 +9,8 @@ import org.springframework.stereotype.Service
 @Service
 class BalanceService {
 
-    private CustomerRepository customerRepository
-    private BalanceRepository balanceRepository
+    private final CustomerRepository customerRepository
+    private final BalanceRepository balanceRepository
 
     @Autowired
     BalanceService(CustomerRepository customerRepository, BalanceRepository balanceRepository) {
@@ -19,11 +18,11 @@ class BalanceService {
         this.customerRepository = customerRepository
     }
 
-    Balance queryCurrentBalance(String customerIdentification) {
-        def customer = customerRepository.findByIdentification(customerIdentification)
-        if (customer == null) {
-            return null
+    Optional<Balance> getCurrentBalance(String username) {
+        def customer = customerRepository.findByUsername(username)
+        if (customer.present) {
+            return balanceRepository.findByCustomer(customer.get())
         }
-        return balanceRepository.findByBalanceMarkAndCustomer(BalanceMark.LAST, customer)
+        return Optional.empty()
     }
 }
