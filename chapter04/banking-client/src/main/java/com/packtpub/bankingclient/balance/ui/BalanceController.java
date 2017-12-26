@@ -3,6 +3,7 @@ package com.packtpub.bankingclient.balance.ui;
 import com.packtpub.bankingclient.balance.service.BalanceService;
 import com.packtpub.bankingclient.security.exception.InvalidRequestException;
 import com.packtpub.bankingclient.ui.NavigableController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
@@ -17,5 +18,9 @@ public class BalanceController extends NavigableController {
         } catch (InvalidRequestException e) {
             balance.setText("An error happened querying the balance");
         }
+    }
+
+    public void exit() {
+        Platform.exit();
     }
 }

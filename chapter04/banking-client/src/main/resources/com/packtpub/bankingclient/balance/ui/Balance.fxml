@@ -16,7 +16,13 @@
         </padding>
 
         <VBox spacing="15">
-            <Button text="Query" onAction="#queryBalance" styleClass="btn-primary"/>
+            
+            <HBox spacing="15" GridPane.columnIndex="2"
+                  GridPane.rowIndex="3">
+                <Button text="Query" onAction="#queryBalance" styleClass="btn-primary"/>
+                <Button text="Exit" onAction="#exit" styleClass="btn-danger"/>
+            </HBox>
+
             <Text fx:id="balance" style="-fx-font-weight: bold;"
                   GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2">
                 <font>

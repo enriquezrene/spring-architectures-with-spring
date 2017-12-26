@@ -25,8 +25,8 @@ public class LoginController extends NavigableController {
         try {
             new LoginService().doLogin(username.getText(), password.getText());
             layout.showScreen("balance");
-        } catch (InvalidRequestException e) {
-            error.setText(e.getMessage());
+        } catch (Exception e) {
+            error.setText("An error happened, try again later.");
         }
     }
 

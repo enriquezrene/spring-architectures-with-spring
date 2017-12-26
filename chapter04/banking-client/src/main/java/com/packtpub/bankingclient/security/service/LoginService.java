@@ -1,27 +1,32 @@
 package com.packtpub.bankingclient.security.service;
 
-import com.packtpub.bankingclient.security.exception.InvalidRequestException;
-import com.packtpub.bankingclient.security.headers.BasicAuthHeaders;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 
 public class LoginService {
 
-    public static final String SERVICE_BASE_URL = "http://localhost:8080/";
-    public static HttpHeaders AUTH_HEADERS = null;
+    public static final String SERVICE_BASE_URL = "http://localhost:8080";
+    public static String JWT_TOKEN = null;
 
-    public void doLogin(String username, String password) throws InvalidRequestException {
-        AUTH_HEADERS = new BasicAuthHeaders(username, password).asHttpHeaders();
+    public void doLogin(String username, String password) {
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<>(AUTH_HEADERS);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        String body = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", username, password);
+        HttpEntity<String> request = new HttpEntity<>(body, httpHeaders);
+        ResponseEntity<String> response = null;
         try {
-            restTemplate.exchange(SERVICE_BASE_URL + "ping", HttpMethod.GET, request, Void.class);
-        } catch (HttpClientErrorException e) {
-            throw new InvalidRequestException("An exception happened during the request, error code: " + e.getStatusCode());
+            response = restTemplate.exchange(SERVICE_BASE_URL + "/api/public/auth", HttpMethod.POST, request, String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("An exception happened during the request");
+        }
+
+        if (HttpStatus.OK.equals(response.getStatusCode())) {
+            JWT_TOKEN = response.getBody();
+        } else {
+            throw new RuntimeException("Invalid credentials");
         }
     }
 }
