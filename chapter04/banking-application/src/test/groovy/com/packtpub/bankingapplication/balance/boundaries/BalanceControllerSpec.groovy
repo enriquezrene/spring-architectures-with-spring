@@ -2,9 +2,11 @@ package com.packtpub.bankingapplication.balance.boundaries
 
 import com.packtpub.bankingapplication.balance.domain.Balance
 import com.packtpub.bankingapplication.balance.service.BalanceService
+import com.packtpub.bankingapplication.security.domain.JwtUser
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
 
+import javax.servlet.http.HttpServletRequest
 import java.security.Principal
 
 
@@ -14,13 +16,14 @@ class BalanceControllerSpec extends Specification {
         given:
         def balanceService = Mock(BalanceService)
         def username = "foo"
-        Principal principal = Mock(Principal)
-        principal.name >> username
+        def jwtUser = new JwtUser(username: username)
+        def request = Mock(HttpServletRequest)
+        request.getAttribute("jwtUser") >> jwtUser
         balanceService.getCurrentBalance(username) >> Optional.empty()
         def balanceController = new BalanceController(balanceService)
 
         when:
-        def response = balanceController.getBalance(principal)
+        def response = balanceController.getBalance(request)
 
         then:
         response.statusCode == HttpStatus.NOT_FOUND
@@ -30,14 +33,15 @@ class BalanceControllerSpec extends Specification {
         given:
         def balanceService = Mock(BalanceService)
         def username = "foo"
-        Principal principal = Mock(Principal)
-        principal.name >> username
+        def jwtUser = new JwtUser(username: username)
+        def request = Mock(HttpServletRequest)
+        request.getAttribute("jwtUser") >> jwtUser
         def balance = Mock(Balance)
         balanceService.getCurrentBalance(username) >> Optional.of(balance)
         def balanceController = new BalanceController(balanceService)
 
         when:
-        def response = balanceController.getBalance(principal)
+        def response = balanceController.getBalance(request)
 
         then:
         response.statusCode == HttpStatus.OK

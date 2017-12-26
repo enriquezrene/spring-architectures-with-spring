@@ -22,8 +22,8 @@ class SampleData implements CommandLineRunner {
 
     @Override
     void run(String... args) throws Exception {
-        def rene = customerRepository.save(new Customer(username: "rene", password: "rene", active: true))
-        def john = customerRepository.save(new Customer(username: "john", password: "john", active: true))
+        def rene = customerRepository.save(new Customer(username: "rene", password: "rene"))
+        def john = customerRepository.save(new Customer(username: "john", password: "john"))
         balanceRepository.save(new Balance(customer: rene, balance: 999))
         balanceRepository.save(new Balance(customer: john, balance: 777))
     }

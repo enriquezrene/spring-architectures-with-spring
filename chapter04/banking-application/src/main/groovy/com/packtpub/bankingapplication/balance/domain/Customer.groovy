@@ -13,6 +13,4 @@ class Customer {
 
     String username, password
 
-    boolean active
-
 }

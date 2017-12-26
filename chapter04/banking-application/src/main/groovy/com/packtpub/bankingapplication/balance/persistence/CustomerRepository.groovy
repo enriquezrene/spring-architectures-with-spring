@@ -7,4 +7,5 @@ interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByUsername(String username)
 
+    Optional<Customer> findByUsernameAndPassword(String username, String password)
 }

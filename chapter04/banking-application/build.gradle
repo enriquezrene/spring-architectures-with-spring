@@ -25,7 +25,7 @@ repositories {
 dependencies {
 
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    compile('org.springframework.boot:spring-boot-starter-security')
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.codehaus.groovy:groovy')
     runtime('com.h2database:h2')
