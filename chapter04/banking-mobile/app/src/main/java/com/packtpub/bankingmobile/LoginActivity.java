@@ -8,17 +8,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.packtpub.bankingmobile.api.BankApi;
-import com.packtpub.bankingmobile.api.client.RetrofitApi;
-import com.packtpub.bankingmobile.api.security.domain.Credentials;
+import com.packtpub.bankingapp.api.SecurityApi;
+import com.packtpub.bankingapp.client.BankClient;
+import com.packtpub.bankingapplication.balance.domain.Credentials;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A login screen that offers login via email/password.
- */
 public class LoginActivity extends Activity {
 
     private EditText usernameText, passwordText;
@@ -30,7 +27,7 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
+
         usernameText = findViewById(R.id.username);
         passwordText = findViewById(R.id.password);
 
@@ -42,7 +39,7 @@ public class LoginActivity extends Activity {
                 final String username = usernameText.getText().toString();
                 final String password = passwordText.getText().toString();
                 try {
-                    BankApi api = RetrofitApi.getRetrofit().create(BankApi.class);
+                    SecurityApi api = BankClient.getRetrofit().create(SecurityApi.class);
                     Call<String> call = api.login(new Credentials(username, password));
                     call.enqueue(new Callback<String>() {
                         @Override
@@ -69,14 +66,3 @@ public class LoginActivity extends Activity {
 
 
 }
-//
-//class LoginTask extends AsyncTask<String, Void, String> {
-//
-//    @Override
-//    protected String doInBackground(String... strings) {
-//        new LoginService().doLogin(strings[0], strings[1]);
-//        return LoginService.JWT_TOKEN;
-//    }
-//
-//}
-

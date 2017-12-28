@@ -1,29 +1,17 @@
 package com.packtpub.bankingmobile;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TextView;
 
-import com.packtpub.bankingmobile.api.BankApi;
-import com.packtpub.bankingmobile.api.balance.domain.Balance;
-import com.packtpub.bankingmobile.api.client.RetrofitApi;
-import com.packtpub.bankingmobile.api.security.domain.Credentials;
+import com.packtpub.bankingapp.api.BankingApi;
+import com.packtpub.bankingapp.client.BankClient;
+import com.packtpub.bankingapplication.balance.domain.BalanceInformation;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 public class BalanceActivity extends Activity {
 
     private TextView balanceTextView;
@@ -35,19 +23,19 @@ public class BalanceActivity extends Activity {
         setContentView(R.layout.activity_balance);
         balanceTextView = findViewById(R.id.fullscreen_content);
         String token = getIntent().getStringExtra(LoginActivity.JWT_TOKEN);
-        BankApi api = RetrofitApi.getRetrofit().create(BankApi.class);
-        Call<Balance> call = api.queryBalance(token);
-        call.enqueue(new Callback<Balance>() {
 
+        BankingApi api = BankClient.getRetrofit().create(BankingApi.class);
+        Call<BalanceInformation> call = api.queryBalance(token);
+        call.enqueue(new Callback<BalanceInformation>() {
             @Override
-            public void onResponse(Call<Balance> call, Response<Balance> response) {
-                balanceTextView.setText("Your balance is: "+response.body().getBalance());
+            public void onResponse(Call<BalanceInformation> call, Response<BalanceInformation> response) {
+                BalanceInformation balanceInformation = response.body();
+                balanceTextView.setText(String.format("Hi %s, your balance is %d", balanceInformation.getCustomer(), balanceInformation.getBalance()));
             }
 
             @Override
-            public void onFailure(Call<Balance> call, Throwable t) {
-                t.printStackTrace();
-
+            public void onFailure(Call<BalanceInformation> call, Throwable throwable) {
+                throwable.printStackTrace();
             }
         });
     }
