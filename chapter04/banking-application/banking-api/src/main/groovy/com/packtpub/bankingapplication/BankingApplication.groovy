@@ -13,7 +13,3 @@ class BankingApplication {
     }
 
 }
-
-
-
-

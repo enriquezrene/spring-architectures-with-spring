@@ -33,4 +33,6 @@ dependencies {
     testCompile('org.springframework.security:spring-security-test')
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-2')
     testCompile('cglib:cglib-nodep:2.2')
+    compile 'io.springfox:springfox-swagger2:2.7.0'
+    compile 'io.springfox:springfox-swagger-ui:2.7.0'
 }
