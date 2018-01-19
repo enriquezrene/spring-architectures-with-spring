@@ -1,0 +1,1 @@
+curl -d'{"customer_id":"1a2b", "origin_account_number":"A1", "destination_account_number":"Z1", "amount":888, "external_bank":"true"}' -H "Content-Type: application/json" http://localhost:8080/transfer

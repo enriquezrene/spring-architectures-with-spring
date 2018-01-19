@@ -1,6 +1,6 @@
-package com.packtpub.callcenterapp;
+package com.packtpub.notifications;
 
-import com.packtpub.callcenterapp.transfer.EventNotificationChannel;
+import com.packtpub.notifications.transfer.EventNotificationChannel;
 import com.packtpub.transfermoneyapp.domain.TransferMoneyDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -13,10 +13,10 @@ import org.springframework.integration.dsl.IntegrationFlows;
 @Slf4j
 @EnableBinding(EventNotificationChannel.class)
 @SpringBootApplication
-public class CallCenterAppApplication {
+public class NotificationsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CallCenterAppApplication.class, args);
+        SpringApplication.run(NotificationsApplication.class, args);
     }
 
 
@@ -24,7 +24,7 @@ public class CallCenterAppApplication {
     IntegrationFlow integrationFlow(EventNotificationChannel eventNotificationChannel) {
         return IntegrationFlows.from(eventNotificationChannel.subscriptionOnMoneyTransferredChannel()).
                 handle(TransferMoneyDetails.class, (payload, headers) -> {
-                    log.info("Verifying if we have to offer investment opportunities to customer with id: " + payload.getCustomerId());
+                    log.info("Notifying by preferred channels to customer with id: " + payload.getCustomerId());
                     log.info("Transaction details: " + payload);
                     return null;
                 }).get();
