@@ -7,8 +7,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class CustomerManagementController {
 
-    @RequestMapping(value = "/customers", method = RequestMethod.GET)
+    @RequestMapping(value = "/home", method = RequestMethod.POST)
     public String home() {
-        return "customers/customer-form";
+        return "guest/home";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String home1() {
+        return "guest/login";
+    }
+
+
+    @RequestMapping(value = "/private", method = RequestMethod.GET)
+    public String home2() {
+        return "private/home_p";
+    }
+
+    @RequestMapping(value = "/page1", method = RequestMethod.GET)
+    public String home3() {
+        return "page1";
     }
 }
