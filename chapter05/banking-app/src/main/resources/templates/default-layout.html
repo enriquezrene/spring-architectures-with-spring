@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8"/>
     <title>Default title for my pages</title>
@@ -11,16 +12,26 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">MVC Demo</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Page 1</a></li>
-            <li><a href="#">Page 2</a></li>
-            <li><a href="#">Page 3</a></li>
+            <li sec:authorize="!isAuthenticated()"><a href="/index">Home</a></li>
+            <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a href="/home">Home</a></li>
+            <li sec:authorize="hasRole('ROLE_CUSTOMER')"><a href="/notifications">My notification channels</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li sec:authorize="!isAuthenticated()">
+                <a href="/login"><span class="glyphicon glyphicon-user"></span>&nbsp; Login</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a href="/logout">
+                    <span class="glyphicon glyphicon-log-in"></span>
+                    &nbsp; Logout
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

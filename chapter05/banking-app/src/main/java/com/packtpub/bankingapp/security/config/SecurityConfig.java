@@ -1,4 +1,4 @@
-package com.packtpub.bankingapp.security;
+package com.packtpub.bankingapp.security.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,17 +12,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/page1").permitAll()
+                .antMatchers("/index").permitAll()
                 .antMatchers("/guest/**").permitAll()
-                .antMatchers("/layout/**").permitAll()
-                .antMatchers("/private/**").hasAuthority("ROLE_CUSTOMER")
+                .antMatchers("/customers/**").hasAuthority("ROLE_CUSTOMER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login").failureUrl("/login?error").successForwardUrl("/home")
                 .usernameParameter("username").passwordParameter("password").permitAll()
-                .and()
-                .logout().logoutSuccessUrl("/login?logout")
+//                .and()
+//                .logout().logoutSuccessUrl("/logout")
                 .and()
                 .csrf();
         ;

@@ -23,12 +23,9 @@ public class BankingUsersDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("=====================");
-        System.out.println(username);
         Optional<Customer> customerFound = customerRepository.findByUsername(username);
         if (customerFound.isPresent()) {
             Customer customer = customerFound.get();
-            System.out.println(customer);
             User.UserBuilder builder = User
                     .withUsername(username)
                     .password(customer.getPassword())

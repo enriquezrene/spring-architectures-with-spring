@@ -4,10 +4,9 @@ import com.packtpub.bankingapp.notifications.domain.NotificationType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @ToString
@@ -22,7 +21,6 @@ public class Customer {
     private Long idCustomer;
 
     private String username;
-
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -31,10 +29,9 @@ public class Customer {
     private List<NotificationType> preferredNotificationChannels;
 
 
-    public Customer(String username, String password, NotificationType preferredNotificationChannel) {
+    public Customer(String username, String password, NotificationType... preferredNotificationChannels) {
         this.username = username;
         this.password = password;
-        this.preferredNotificationChannels = new ArrayList<>();
-        this.preferredNotificationChannels.add(preferredNotificationChannel);
+        this.preferredNotificationChannels = Arrays.asList(preferredNotificationChannels);
     }
 }
