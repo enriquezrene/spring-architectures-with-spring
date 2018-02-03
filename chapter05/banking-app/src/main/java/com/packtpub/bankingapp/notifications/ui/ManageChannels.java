@@ -3,6 +3,7 @@ package com.packtpub.bankingapp.notifications.ui;
 import com.packtpub.bankingapp.balance.dao.CustomerRepository;
 import com.packtpub.bankingapp.balance.domain.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,7 @@ public class ManageChannels {
     }
 
     @RequestMapping(value = "/notifications", method = RequestMethod.GET)
-    public String manageNotificationChannels(Model model) {
-        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public String manageNotificationChannels(Model model, @AuthenticationPrincipal User loggedInUser) {
         Customer customer = customerRepository.findByUsername(loggedInUser.getUsername()).get();
         model.addAttribute("preferredChannels", customer.getPreferredNotificationChannels());
         return "customers/notification-channels";
