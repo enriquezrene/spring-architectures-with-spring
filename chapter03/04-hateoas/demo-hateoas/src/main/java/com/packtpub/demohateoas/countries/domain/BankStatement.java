@@ -4,13 +4,13 @@ import lombok.Data;
 import org.springframework.hateoas.ResourceSupport;
 
 @Data
-public class AccountStatus extends ResourceSupport {
+public class BankStatement extends ResourceSupport {
 
-    private Integer accountStatusId;
+    private Integer bankStatementId;
     private String information;
 
-    public AccountStatus(Integer accountStatusId, String information) {
-        this.accountStatusId = accountStatusId;
+    public BankStatement(Integer bankStatementId, String information) {
+        this.bankStatementId = bankStatementId;
         this.information = information;
     }
 }

@@ -32,7 +32,7 @@ public class CustomerController {
             @PathVariable(value = "id") int id) {
         Customer customer = new Customer(id, customers.get(id));
         customer.add(linkTo((methodOn(CustomerController.class).findById(id))).withSelfRel());
-        customer.add(linkTo((methodOn(AccountStatusController.class).findAccountStatus(id))).withRel("accountStatuses"));
+        customer.add(linkTo((methodOn(BankStatementController.class).findBankStatements(id))).withRel("bankStatements"));
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
