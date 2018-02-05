@@ -1,9 +1,9 @@
 package com.packtpub.bankingapplication.accounts.services;
 
 
-import com.packtpub.bankingapplication.accounts.dao.AccountStatusRepository;
+import com.packtpub.bankingapplication.accounts.dao.BankStatementRepository;
 import com.packtpub.bankingapplication.accounts.dao.CustomerRepository;
-import com.packtpub.bankingapplication.accounts.domain.AccountStatus;
+import com.packtpub.bankingapplication.accounts.domain.BankStatement;
 import com.packtpub.bankingapplication.accounts.domain.Customer;
 import com.packtpub.bankingapplication.notifications.domain.NotificationType;
 import com.packtpub.bankingapplication.notifications.factory.NotificationChannelFactory;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class AccountStatusServiceTest {
+public class BankStatementServiceTest {
 
     NotificationChannel emailChannel, faxChannel;
     NotificationChannelFactory notificationChannelsFactory;
@@ -31,21 +31,21 @@ public class AccountStatusServiceTest {
     }
 
     @Test
-    public void theAccountStatusIsSendUsingThePreferredNotificationChannels() throws Exception {
+    public void theBankStatementIsSendUsingThePreferredNotificationChannels() throws Exception {
 
-        AccountStatus accountStatus = mock(AccountStatus.class);
+        BankStatement bankStatement = mock(BankStatement.class);
         Customer customer = mock(Customer.class);
         CustomerRepository customerRepository = mock(CustomerRepository.class);
-        AccountStatusRepository accountStatusRepository = mock(AccountStatusRepository.class);
+        BankStatementRepository bankStatementRepository = mock(BankStatementRepository.class);
         when(customerRepository.getPreferredNotificationChannels(customer)).thenReturn(buildListOfNotificationTypes());
-        when(accountStatusRepository.getCustomerAccountStatus(customer)).thenReturn(accountStatus);
-        AccountStatusService accountStatusService = new AccountStatusService(notificationChannelsFactory, customerRepository, accountStatusRepository);
+        when(bankStatementRepository.getCustomerBankStatement(customer)).thenReturn(bankStatement);
+        BankStatementService bankStatementService = new BankStatementService(notificationChannelsFactory, customerRepository, bankStatementRepository);
 
-        accountStatusService.sendAccountStatus(customer);
+        bankStatementService.sendBankStatement(customer);
 
         verify(customerRepository, times(1)).getPreferredNotificationChannels(customer);
-        verify(emailChannel, times(1)).send(accountStatus);
-        verify(faxChannel, times(1)).send(accountStatus);
+        verify(emailChannel, times(1)).send(bankStatement);
+        verify(faxChannel, times(1)).send(bankStatement);
 
     }
 

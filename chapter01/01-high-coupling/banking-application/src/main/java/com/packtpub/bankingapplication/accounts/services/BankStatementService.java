@@ -1,39 +1,36 @@
 package com.packtpub.bankingapplication.accounts.services;
 
-import com.packtpub.bankingapplication.accounts.dao.AccountStatusRepository;
+import com.packtpub.bankingapplication.accounts.dao.BankStatementRepository;
 import com.packtpub.bankingapplication.accounts.dao.CustomerRepository;
-import com.packtpub.bankingapplication.accounts.domain.AccountStatus;
+import com.packtpub.bankingapplication.accounts.domain.BankStatement;
 import com.packtpub.bankingapplication.accounts.domain.Customer;
 import com.packtpub.bankingapplication.notifications.domain.NotificationChannel;
 import com.packtpub.bankingapplication.notifications.services.NotificationService;
 
 import java.util.List;
 
-/**
- * Created by renriquez on 15/11/17.
- */
-public class AccountStatusService {
+public class BankStatementService {
 
     private NotificationService notificationService;
     private CustomerRepository customerRepository;
-    private AccountStatusRepository accountStatusRepository;
+    private BankStatementRepository bankStatementRepository;
 
 
-    public AccountStatusService(NotificationService notificationService, CustomerRepository customerRepository, AccountStatusRepository accountStatusRepository) {
+    public BankStatementService(NotificationService notificationService, CustomerRepository customerRepository, BankStatementRepository bankStatementRepository) {
         this.notificationService = notificationService;
         this.customerRepository = customerRepository;
-        this.accountStatusRepository = accountStatusRepository;
+        this.bankStatementRepository = bankStatementRepository;
     }
 
-    public void sendAccountStatus(Customer customer) {
+    public void sendBankStatement(Customer customer) {
         List<NotificationChannel> preferredChannels = customerRepository.getPreferredNotificationChannels(customer);
-        AccountStatus accountStatus = accountStatusRepository.getCustomerAccountStatus(customer);
+        BankStatement bankStatement = bankStatementRepository.getCustomerBankStatement(customer);
         preferredChannels.forEach(
                 channel -> {
                     if ("email".equals(channel.getChannelName())) {
-                        notificationService.sendByEmail(accountStatus);
+                        notificationService.sendByEmail(bankStatement);
                     } else if ("fax".equals(channel.getChannelName())) {
-                        notificationService.sendByFax(accountStatus);
+                        notificationService.sendByFax(bankStatement);
                     }
                 }
         );

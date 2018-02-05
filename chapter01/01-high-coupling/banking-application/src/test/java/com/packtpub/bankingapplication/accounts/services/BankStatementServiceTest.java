@@ -1,9 +1,9 @@
 package com.packtpub.bankingapplication.accounts.services;
 
 
-import com.packtpub.bankingapplication.accounts.dao.AccountStatusRepository;
+import com.packtpub.bankingapplication.accounts.dao.BankStatementRepository;
 import com.packtpub.bankingapplication.accounts.dao.CustomerRepository;
-import com.packtpub.bankingapplication.accounts.domain.AccountStatus;
+import com.packtpub.bankingapplication.accounts.domain.BankStatement;
 import com.packtpub.bankingapplication.accounts.domain.Customer;
 import com.packtpub.bankingapplication.notifications.domain.NotificationChannel;
 import com.packtpub.bankingapplication.notifications.services.NotificationService;
@@ -15,12 +15,12 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class AccountStatusServiceTest {
+public class BankStatementServiceTest {
 
     @Test
-    public void theAccountStatusIsSendUsingThePreferredNotificationChannels() throws Exception {
+    public void theBankStatementIsSendUsingThePreferredNotificationChannels() throws Exception {
         NotificationService notificationService = mock(NotificationService.class);
-        AccountStatus accountStatus = mock(AccountStatus.class);
+        BankStatement bankStatement = mock(BankStatement.class);
         Customer customer = Mockito.mock(Customer.class);
         CustomerRepository customerRepository = mock(CustomerRepository.class);
         List<NotificationChannel> preferredNotificationChannels = new ArrayList<>();
@@ -31,15 +31,15 @@ public class AccountStatusServiceTest {
         preferredNotificationChannels.add(emailChannel);
         preferredNotificationChannels.add(faxChannel);
         when(customerRepository.getPreferredNotificationChannels(customer)).thenReturn(preferredNotificationChannels);
-        AccountStatusRepository accountStatusRepository = mock(AccountStatusRepository.class);
-        when(accountStatusRepository.getCustomerAccountStatus(customer)).thenReturn(accountStatus);
-        AccountStatusService accountStatusService = new AccountStatusService(notificationService, customerRepository, accountStatusRepository);
+        BankStatementRepository bankStatementRepository = mock(BankStatementRepository.class);
+        when(bankStatementRepository.getCustomerBankStatement(customer)).thenReturn(bankStatement);
+        BankStatementService bankStatementService = new BankStatementService(notificationService, customerRepository, bankStatementRepository);
 
-        accountStatusService.sendAccountStatus(customer);
+        bankStatementService.sendBankStatement(customer);
 
         verify(customerRepository, times(1)).getPreferredNotificationChannels(customer);
-        verify(notificationService, times(1)).sendByEmail(accountStatus);
-        verify(notificationService, times(1)).sendByFax(accountStatus);
+        verify(notificationService, times(1)).sendByEmail(bankStatement);
+        verify(notificationService, times(1)).sendByFax(bankStatement);
 
     }
 }

@@ -1,4 +1,4 @@
 package com.packtpub.bankingapplication.accounts.domain;
 
-public class Customer {
+public class BankStatement {
 }
