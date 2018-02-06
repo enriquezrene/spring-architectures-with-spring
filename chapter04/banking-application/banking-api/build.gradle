@@ -25,6 +25,7 @@ repositories {
 dependencies {
     compile project(':banking-domain')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile("org.springframework.boot:spring-boot-starter-actuator")
     compile 'io.jsonwebtoken:jjwt:0.7.0'
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.codehaus.groovy:groovy')
