@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 public class NotificationChannelFactoryTest {
 
     @Test
-    public void theNotificationChannelsAreGetFromTheProvidedOnes() throws Exception {
+    public void givenANameWhenTheNotificationChannelIsRequestedThenTheChannelIsReturned() throws Exception {
 
         EmailNotificationChannel email = mock(EmailNotificationChannel.class);
         FaxNotificationChannel fax = mock(FaxNotificationChannel.class);
