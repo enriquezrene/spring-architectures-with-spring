@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 
-
 @EnableBinding(EventNotificationChannel.class)
 @SpringBootApplication
 public class TransferMoneyAppApplication {

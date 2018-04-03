@@ -1,6 +1,6 @@
 package com.packtpub.transfermoneyapp.transfer.boundaries;
 
-import com.packtpub.transfermoneyapp.domain.TransferMoneyDetails;
+import com.packtpub.transfermoneyapp.transfer.domain.TransferMoneyDetails;
 import com.packtpub.transfermoneyapp.transfer.events.EventNotificationChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -23,7 +23,7 @@ public class TransferController {
     @PostMapping("/transfer")
     public void doTransfer(@RequestBody TransferMoneyDetails transferMoneyDetails) {
         log.info("Transferring money with details: " + transferMoneyDetails);
-        Message<TransferMoneyDetails> moneyTransferredEvent = MessageBuilder.withPayload(transferMoneyDetails).build();
+        Message<String> moneyTransferredEvent = MessageBuilder.withPayload("Money transferred for client with id: " + transferMoneyDetails.getCustomerId()).build();
         this.moneyTransferredChannel.send(moneyTransferredEvent);
     }
 }
