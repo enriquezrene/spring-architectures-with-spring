@@ -47,16 +47,17 @@ public class CustomerController {
         CommandInvoker commandInvoker = new CommandInvoker();
         commandInvoker.invoke(createCustomerCommand);
 
+        log.info("COMMAND INFORMATION");
         commandRepository.findAll().stream().forEach(command -> {
             log.info(command.getCommandId());
             log.info(command.getCommandName());
             log.info(command.getCommandData().toJSONString());
         });
 
+        log.info("EVENT INFORMATION");
         eventRepository.findAll().stream().forEach(event -> {
-            log.info(event.getCommandId());
-            log.info(event.getEventId());
             log.info(event.getEventName());
+            log.info("EVENT ID " + event.getEventId());
             log.info(event.getEventData().toJSONString());
         });
     }

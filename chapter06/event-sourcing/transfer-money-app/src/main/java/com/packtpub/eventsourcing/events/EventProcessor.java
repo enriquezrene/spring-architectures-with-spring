@@ -24,7 +24,6 @@ public class EventProcessor {
             Account account = new Account(event);
             getRepository(event.getEventName()).save(account);
         }
-        System.out.println(getRepository(event.getEventName()).findAll().size());
     }
 
     private JpaRepository getRepository(String eventName) {
