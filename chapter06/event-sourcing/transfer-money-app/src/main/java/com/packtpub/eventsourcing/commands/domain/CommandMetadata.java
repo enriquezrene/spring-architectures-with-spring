@@ -1,10 +1,13 @@
 package com.packtpub.eventsourcing.commands.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.simple.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
+@Getter
+@Setter
 @Document
 public class CommandMetadata {
 
@@ -12,34 +15,13 @@ public class CommandMetadata {
     private String commandId;
     private String commandName;
     private JSONObject commandData;
+    private long timestamp;
 
     public CommandMetadata(String commandId, String commandName, JSONObject commandData) {
         this.commandId = commandId;
         this.commandName = commandName;
         this.commandData = commandData;
+        this.timestamp = System.currentTimeMillis();
     }
 
-    public void setCommandId(String commandId) {
-        this.commandId = commandId;
-    }
-
-    public void setCommandName(String commandName) {
-        this.commandName = commandName;
-    }
-
-    public void setCommandData(JSONObject commandData) {
-        this.commandData = commandData;
-    }
-
-    public String getCommandId() {
-        return commandId;
-    }
-
-    public String getCommandName() {
-        return commandName;
-    }
-
-    public JSONObject getCommandData() {
-        return commandData;
-    }
 }

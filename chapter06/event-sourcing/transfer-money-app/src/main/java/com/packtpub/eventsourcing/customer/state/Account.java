@@ -1,6 +1,6 @@
 package com.packtpub.eventsourcing.customer.state;
 
-import com.packtpub.eventsourcing.events.Event;
+import com.packtpub.eventsourcing.events.domain.EventMetadata;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +24,7 @@ public class Account {
 
     private String type;
 
-    public Account(Event accountCreatedEvent) {
+    public Account(EventMetadata accountCreatedEvent) {
         JSONObject jsonObject = accountCreatedEvent.getEventData();
         this.accountId = jsonObject.get("account_id").toString();
         this.customerId = jsonObject.get("customer_id").toString();

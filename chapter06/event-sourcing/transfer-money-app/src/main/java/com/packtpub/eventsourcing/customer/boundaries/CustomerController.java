@@ -7,8 +7,8 @@ import com.packtpub.eventsourcing.commands.CommandInvoker;
 import com.packtpub.eventsourcing.commands.persistence.CommandRepository;
 import com.packtpub.eventsourcing.customer.commands.CreateCustomerCommand;
 import com.packtpub.eventsourcing.customer.domain.CustomerData;
-import com.packtpub.eventsourcing.customer.events.EventRepository;
 import com.packtpub.eventsourcing.events.EventProcessor;
+import com.packtpub.eventsourcing.events.persistence.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,6 @@ public class CustomerController {
     @PostMapping("/customer")
     public void createCustomer(@RequestBody CustomerData customerData) throws Exception {
 
-        log.info(customerData.toString());
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.convertValue(customerData,
                 new TypeReference<Map<String, Object>>() {
@@ -49,16 +48,12 @@ public class CustomerController {
 
         log.info("COMMAND INFORMATION");
         commandRepository.findAll().stream().forEach(command -> {
-            log.info(command.getCommandId());
-            log.info(command.getCommandName());
-            log.info(command.getCommandData().toJSONString());
+            log.info("id: {} , name: {} , data: {} ", command.getCommandId(), command.getCommandName(), command.getCommandData().toJSONString());
         });
 
         log.info("EVENT INFORMATION");
         eventRepository.findAll().stream().forEach(event -> {
-            log.info(event.getEventName());
-            log.info("EVENT ID " + event.getEventId());
-            log.info(event.getEventData().toJSONString());
+            log.info("id: {} , name: {} , command id: {} , data: {} ", event.getEventId(), event.getEventName(), event.getCommandId(), event.getEventData().toJSONString());
         });
     }
 }

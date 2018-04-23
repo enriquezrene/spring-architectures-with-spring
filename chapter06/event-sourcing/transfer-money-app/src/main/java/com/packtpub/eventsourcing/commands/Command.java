@@ -1,7 +1,7 @@
 package com.packtpub.eventsourcing.commands;
 
 import com.packtpub.eventsourcing.commands.persistence.CommandRepository;
-import com.packtpub.eventsourcing.customer.events.EventRepository;
+import com.packtpub.eventsourcing.events.persistence.EventRepository;
 import com.packtpub.eventsourcing.events.EventProcessor;
 import org.json.simple.JSONObject;
 

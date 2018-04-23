@@ -1,7 +1,7 @@
 package com.packtpub.eventsourcing.events.boundaries;
 
-import com.packtpub.eventsourcing.customer.events.EventRepository;
-import com.packtpub.eventsourcing.events.Event;
+import com.packtpub.eventsourcing.events.persistence.EventRepository;
+import com.packtpub.eventsourcing.events.domain.EventMetadata;
 import com.packtpub.eventsourcing.events.EventProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class EventController {
 
     @PostMapping("/events/{id}")
     public void createCustomer(@PathVariable("id") String id) throws Exception {
-        Event event = eventRepository.findById(id).get();
+        EventMetadata event = eventRepository.findById(id).get();
         eventProcessor.process(event);
     }
 }

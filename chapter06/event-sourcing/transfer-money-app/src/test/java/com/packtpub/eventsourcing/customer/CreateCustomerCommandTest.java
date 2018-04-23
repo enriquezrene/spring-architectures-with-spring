@@ -3,10 +3,9 @@ package com.packtpub.eventsourcing.customer;
 import com.packtpub.eventsourcing.commands.domain.CommandMetadata;
 import com.packtpub.eventsourcing.commands.persistence.CommandRepository;
 import com.packtpub.eventsourcing.customer.commands.CreateCustomerCommand;
-import com.packtpub.eventsourcing.customer.events.AccountCreatedEvent;
-import com.packtpub.eventsourcing.customer.events.CustomerCreatedEvent;
-import com.packtpub.eventsourcing.customer.events.EventRepository;
 import com.packtpub.eventsourcing.events.EventProcessor;
+import com.packtpub.eventsourcing.events.domain.EventMetadata;
+import com.packtpub.eventsourcing.events.persistence.EventRepository;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,7 +13,7 @@ import org.mockito.Mockito;
 public class CreateCustomerCommandTest {
 
     @Test
-    public void whenExecuteThenProduceACustomerCreatedEvent() throws Exception {
+    public void whenExecuteThenProduceTwoEvents() throws Exception {
         JSONObject createCustomerData = buildCreateCustomerData();
         CommandRepository commandRepository = Mockito.mock(CommandRepository.class);
         EventRepository eventRepository = Mockito.mock(EventRepository.class);
@@ -22,21 +21,9 @@ public class CreateCustomerCommandTest {
 
         createCustomerCommand.execute();
 
-        Mockito.verify(eventRepository, Mockito.times(1)).save(Mockito.any(CustomerCreatedEvent.class));
+        Mockito.verify(eventRepository, Mockito.times(2)).save(Mockito.any(EventMetadata.class));
     }
 
-
-    @Test
-    public void whenExecuteThenProduceAnAccountCreatedEvent() throws Exception {
-        JSONObject createCustomerData = buildCreateCustomerData();
-        CommandRepository commandRepository = Mockito.mock(CommandRepository.class);
-        EventRepository eventRepository = Mockito.mock(EventRepository.class);
-        CreateCustomerCommand createCustomerCommand = new CreateCustomerCommand(createCustomerData, commandRepository, eventRepository, Mockito.mock(EventProcessor.class));
-
-        createCustomerCommand.execute();
-
-        Mockito.verify(eventRepository, Mockito.times(1)).save(Mockito.any(AccountCreatedEvent.class));
-    }
 
     @Test
     public void whenTheCommandIsExecutedItIsAlsoPersisted() throws Exception {
@@ -60,10 +47,8 @@ public class CreateCustomerCommandTest {
 
         createCustomerCommand.execute();
 
-        Mockito.verify(eventProcessor, Mockito.times(1)).process(Mockito.any(AccountCreatedEvent.class));
-        Mockito.verify(eventProcessor, Mockito.times(1)).process(Mockito.any(CustomerCreatedEvent.class));
+        Mockito.verify(eventProcessor, Mockito.times(2)).process(Mockito.any(EventMetadata.class));
     }
-
 
 
     private JSONObject buildCreateCustomerData() {
