@@ -1,5 +1,6 @@
 FROM java:8
 WORKDIR /
-ADD build/libs/banking-app-1.0.jar banking-app-1.0.jar
+ARG JAR_FILE
+COPY ${JAR_FILE} app.jar
 EXPOSE 8080
-CMD java -jar banking-app-1.0.jar
+ENTRYPOINT ["java","-jar","app.jar"]
