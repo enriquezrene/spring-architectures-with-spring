@@ -13,8 +13,8 @@ public class CustomerServiceTest {
 
     @Test
     public void theNotificationChannelsAreSavedByTheDataRepository() throws Exception {
-        NotificationType channelOne = Mockito.mock(NotificationType.class);
-        NotificationType channelTwo = Mockito.mock(NotificationType.class);
+        NotificationType channelOne = NotificationType.EMAIL;
+        NotificationType channelTwo = NotificationType.FAX;
         CustomerRepository customerRepository = Mockito.mock(CustomerRepository.class);
         CustomerService customerService = new CustomerService(customerRepository);
         List<NotificationType> notificationChannels = new ArrayList();
