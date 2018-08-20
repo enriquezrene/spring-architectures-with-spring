@@ -6,6 +6,9 @@ event-bus:
   domain: event-bus.api.com
   protocol: http
 
+configuration:
+  dynamicValue: 99
+
 
 management:
   endpoints:
